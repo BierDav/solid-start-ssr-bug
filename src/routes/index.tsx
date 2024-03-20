@@ -1,48 +1,50 @@
 import { Title } from "@solidjs/meta";
-import Counter from "~/components/Counter";
-import { createResource, For } from "solid-js";
+import { For } from "solid-js";
+import { useAssets } from "solid-js/web";
+import { Coffee, CoffeeItem } from "~/components/CoffeeItem";
 
-interface Coffee {
-    title: string;
-    description: string;
-    ingredients: string[];
-    image: string;
-    id: number;
-}
+export default function () {
+    const data = () => [{
+        "title": "Cappuccino",
+        "description": "A cappuccino is an espresso-based coffee drink that originated in Italy, and is traditionally prepared with steamed milk foam.",
+        "ingredients": ["Espresso", "Milk", "Milk Foam"],
+        "image": "https://images.unsplash.com/photo-1532004491497-ba35c367d634?auto=format&fit=crop&q=80&w=1887&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "id": 1
+    }, {
+        "title": "Espresso",
+        "description": "Espresso is a coffee-brewing method of Italian origin, in which a small amount of nearly boiling water is forced under pressure through finely-ground coffee beans.",
+        "ingredients": ["Espresso"],
+        "image": "https://images.unsplash.com/photo-1532004491497-ba35c367d634?auto=format&fit=crop&q=80&w=1887&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "id": 2
+    }, {
+        "title": "Latte",
+        "description": "Cafe latte is a coffee drink made with espresso and steamed milk. The word comes from the Italian caffè e latte, caffelatte or caffellatte, which means \"coffee & milk\".",
+        "ingredients": ["Espresso", "Milk"],
+        "image": "https://images.unsplash.com/photo-1532004491497-ba35c367d634?auto=format&fit=crop&q=80&w=1887&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "id": 3
+    }, {
+        "title": "Mocha",
+        "description": "A mocha is a mixed coffee beverage with chocolate. It can be hot or cold. 1/3 espresso, 1/3 cocoa, 1/3 milk.",
+        "ingredients": ["Espresso", "Cocoa", "Milk"],
+        "image": "https://images.unsplash.com/photo-1532004491497-ba35c367d634?auto=format&fit=crop&q=80&w=1887&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        "id": 4
+    }]
 
-// Array of coffees
-type CoffeeList = Coffee[];
-
-export default function Home() {
-
-    // query a sample api
-    const [data] = createResource<CoffeeList>(async () => {
-        const resp = await fetch('https://api.sampleapis.com/coffee/hot');
-        return await resp.json();
-    })
+    useAssets(() => (<style>
+        {`
+        #test-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        }
+        `}
+    </style>))
     return (
         <main>
-            <Title>Hello World</Title>
-            <h1>Hello world!</h1>
-            <Counter/>
-
-            <div style={{display: 'flex', "flex-wrap": "wrap", gap: "8px"}}>
-                <For each={data()}>{(coffee: Coffee) => (<>
-                    <div style={{width: "200px  "}}>
-                        <h2>{coffee.title}</h2>
-                        <p>{coffee.description}</p>
-                        <p>Ingredients: {coffee.ingredients.join(', ')}</p>
-                        <img src={coffee.image} alt={coffee.title} width="200"/>
-                    </div>
-                </>)}</For>
+            <Title>Coffees - Working</Title>
+            <div id={"test-container"}>
+                <For each={data()}>{(coffee: Coffee) => (<CoffeeItem coffee={coffee}/>)}</For>
             </div>
-            <p>
-                Visit{" "}
-                <a href="https://start.solidjs.com" target="_blank">
-                    start.solidjs.com
-                </a>{" "}
-                to learn how to build SolidStart apps.
-            </p>
         </main>
     );
 }
